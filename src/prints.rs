@@ -1,6 +1,4 @@
-
-use rand::Rng;
-use crate::colors::{BLUE, COLORMAP, CYAN, GREEN, MAGENTA, RED, RESET, YELLOW};
+use crate::colors::{BLUE, CYAN, GREEN, MAGENTA, RED, RESET, YELLOW};
 use crate::utils;
 
 pub fn print_lose() {
@@ -56,18 +54,20 @@ pub fn print_spectrum(start: i32, end: i32) {
     println!();
 }
 
-pub fn print_card(content: &str) {
+pub fn print_card(content: &str, color_code: &String) {
     let lines: Vec<&str> = content.split('\n').collect();
     let max_length = lines.iter().map(|line| line.len()).max().unwrap_or(0);
     let horizontal_border = format!("+{}+", "-".repeat(max_length + 2));
-
-    let random_index = rand::rng().random_range(0..COLORMAP.len());
-    let color_code = COLORMAP[random_index];
 
     println!("\n{}                {}", color_code, horizontal_border);
     for line in lines {
         println!("                | \x1B[1m{: <width$}\x1B[0m {}|", line, color_code, width = max_length);
     }
     println!("                {}{}", color_code, horizontal_border);
+    println!("{}", RESET);
+}
+
+pub fn print_round_banner(round: usize, color_code: &String) {
+    println!("{}###################################### ROUND {round} ########################################", color_code);
     println!("{}", RESET);
 }

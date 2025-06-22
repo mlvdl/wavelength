@@ -57,8 +57,7 @@ cheap  - expensive
 cheerful  - saddreary
 clear  - cloudy
 clever  - stupid
-clockwise  -
-counterclockwise
+clockwise  - counterclockwise
 close  - far
 closed  - ajar
 clumsy  - graceful

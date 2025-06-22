@@ -4,8 +4,7 @@ use std::io::BufRead;
 use std::path::Path;
 use std::process::exit;
 use rand::Rng;
-use colors::{BLUE, COLORMAP, CYAN, GREEN, MAGENTA, RED, RESET, YELLOW};
-use crate::utils::clear_terminal;
+use colors::{BLUE, CYAN, GREEN, MAGENTA, RED, YELLOW};
 
 mod prints;
 mod utils;
@@ -23,7 +22,7 @@ fn main() {
     let mut end = 10;
     start_menu(&mut end);
     let spectrum = 0..=end;
-    clear_terminal();
+    utils::clear_terminal();
     println!("The spectrum is: ");
     prints::print_spectrum(*spectrum.start(), *spectrum.end());
 
@@ -40,13 +39,15 @@ fn main() {
     let n_rounds = 7;
     let mut answer = String::new();
 
+    let color_map = utils::get_color_map(*spectrum.start(), *spectrum.end());
     for round in 1..n_rounds + 1 {
         println!("\nPress enter to start round {}.", round);
-        io::stdin().read_line(&mut answer).expect("Failed to read line");
-        clear_terminal();
+        let color_code = &color_map[round];
 
-        println!("{}###################################### ROUND {round} ########################################", COLORMAP[round - 1]);
-        println!("{}", RESET);
+        io::stdin().read_line(&mut answer).expect("Failed to read line");
+        utils::clear_terminal();
+
+        prints::print_round_banner(round, color_code);
 
         let mut card_content ;
         loop {
@@ -55,7 +56,7 @@ fn main() {
             let random_index = rng.random_range(0..lines.len());
             card_content = &lines[random_index];
             println!("You draw the following card:");
-            prints::print_card(card_content);
+            prints::print_card(card_content, color_code);
             println!("Press enter to see the hidden target is. Psst... make sure that only the psychic sees it! (Press (n) to get a new card)");
             io::stdin()
                 .read_line(&mut answer)
@@ -75,8 +76,10 @@ fn main() {
         io::stdin().read_line(&mut input).unwrap();
         utils::clear_terminal();
 
+        prints::print_round_banner(round, color_code);
+
         println!("The card is:");
-        prints::print_card(card_content);
+        prints::print_card(card_content, color_code);
 
         // The Psychic gives a clue
         println!("Psychic, please give a clue (e.g., a word or phrase):");

@@ -50,6 +50,20 @@ pub fn get_color(value: i32, max_value: i32) -> String {
     rgb_to_ansi(r, g, b)
 }
 
+pub fn get_color_map(start: i32, end: i32) -> Vec<String> {
+    let mut color_map = vec![];
+    if start == end {
+        color_map.push("\x1b[0m".to_string());
+        return color_map;
+    }
+
+    for value in start..=end {
+        let color = get_color(value - start, end - start);
+        color_map.push(color);
+    }
+    color_map
+}
+
 pub fn read_number(min: i32, max: i32) -> i32 {
     let guess: i32;
     loop {

@@ -8,11 +8,3 @@ pub const MAGENTA: &str = "\x1B[35m";
 pub const CYAN: &str = "\x1B[36m";
 const _WHITE: &str = "\x1B[37m";
 
-pub const COLORMAP: [&str; 6] = [
-    "\x1b[31m", // Red
-    "\x1b[33m", // Yellow
-    "\x1b[32m", // Green
-    "\x1b[36m", // Cyan
-    "\x1b[34m", // Blue
-    "\x1b[35m", // Magenta
-];
