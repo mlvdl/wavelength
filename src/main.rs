@@ -1,7 +1,6 @@
 use std::fs::File;
 use std::io;
 use std::io::BufRead;
-use std::ops::RangeBounds;
 use std::path::Path;
 use std::process::exit;
 use rand::Rng;
