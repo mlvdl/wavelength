@@ -1,9 +1,9 @@
 use std::fs::File;
-use rand::Rng;
 use std::io;
 use std::io::BufRead;
 use std::path::Path;
 use std::process::Command;
+use rand::Rng;
 
 
 // Define ANSI color codes
