@@ -1,0 +1,604 @@
+absent  - present
+abundant  - scarce
+accept  - decline
+accurate  - inaccurate
+admit  - deny
+advantage  - disadvantage
+against  - for
+agree  - disagree
+alive  - dead
+all  - none
+ally  - enemy
+always  - never
+ancient  - modern
+answer  - question
+antonym  - synonym
+apart  - together
+appear  - disappear
+approve  - disapprove
+arrive  - depart
+artificial  - natural
+ascend  - descend
+attic  - cellar
+attractive  - repulsive
+awake  - asleep
+backward  - forward
+bad  - good
+beautiful  - ugly
+before  - after
+begin  - end
+below  - above
+bent  - straight
+best  - worst
+better  - worse
+big  - little
+black  - white
+blame  - praise
+bless  - curse
+bitter  - sweet
+borrow  - lend
+bottom  - top
+boy  - girl
+brave  - cowardly
+build  - destroy
+bold  - meek
+borrow  - lend
+bound  - unbound
+boundless  - limited
+bright  - dim
+brighten  - fade
+broad  - narrow
+calm  - windy
+can  - cannot
+capable  - incapable
+captive  - free
+careful  - careless
+cheap  - expensive
+cheerful  - saddreary
+clear  - cloudy
+clever  - stupid
+clockwise  -
+counterclockwise
+close  - far
+closed  - ajar
+clumsy  - graceful
+cold  - hot
+combine  - separate
+come  - go
+comfort  - discomfort
+common  - rare
+conceal  - reveal
+contract  - expand
+cool  - warm
+correct  - incorrect
+courage  - cowardice
+create  - destroy
+crooked  - straight
+cruel  - kind
+compulsory  - voluntary
+courteous  - discourteous
+dangerous  - safe
+dark  - light
+day  - night
+daytime  - nighttime
+dead  - alive
+decline  - accept
+deep  - shallow
+definite  - indefinite
+demand  - supply
+despair  - hope
+dim  - bright
+disappear  - appear
+diseased  - healthy
+down  - up
+downwards  - upwards
+dreary  - cheerful
+dry  - moist
+dull  - bright
+decrease  - increase
+discourage  - encourage
+dusk  - dawn
+early  - late
+east  - west
+easy  - hard
+empty  - full
+encourage  - discourage
+end  - begin
+enter  - exit
+even  - odd
+expand  - contract
+export  - import
+exterior  - interior
+external  - internal
+fade  - brighten
+fail  - succeed
+false  - true
+famous  - unknown
+far  - near
+fast  - slow
+fat  - thin
+feeble  - strong
+few  - many
+find  - lose
+first  - last
+float  - sink
+foolish  - wise
+fore  - aft
+free  - bound
+fold  - unfold
+forget  - remember
+found  - lost
+fresh  - stale
+frequent  - seldom
+friend  - enemy
+for  - against
+fortunate  - unfortunate
+full  - empty
+generous  - stingy
+gentle  - rough
+get  - give
+giant  - tiny
+girl  - boy
+give  - receive
+glad  - sad
+gloomy  - cheerful
+go  - stop
+good  - bad
+grant  - refuse
+great  - tiny
+grow  - shrink
+guest  - host
+guilty  - innocent
+happy  - sad
+hard  - easy
+hard  - soft
+harmful  - harmless
+harsh  - mild
+hate  - love
+haves  - have-nots
+healthy  - diseased
+heaven  - hell
+heavy  - light
+help  - hinder
+here  - there
+hero  - coward
+high  - low
+hill  - valley
+hinder  - help
+honest  - dishonest
+horizontal  - vertical
+hot  - cold
+humble  - proud
+ill  - healthy
+immense  - tiny
+important  - trivial
+in  - out
+include  - exclude
+increase  - decrease
+inferior  - superior
+inhale  - exhale
+inner  - outer
+inside  - outside
+intelligent  - stupid
+interesting  - boring
+interior  - exterior
+interesting  - dull
+internal  - external
+intentional  - accidental
+join  - separate
+junior  - senior
+just  - unjust
+justice  - injustice
+knowledge  - ignorance
+known  - unknown
+landlord  - tenant
+large  - small
+last  - first
+laugh  - cry
+lawful  - unlawful
+lazy  - industrious
+leader  - follower
+left  - right
+lend  -borrow
+lengthen  - shorten
+lenient  - strict
+left  - right
+less  - more
+light  - dark
+like  - dislike
+likely  - unlikely
+limited  - boundless
+little  - big
+long  - short
+loose  - tight
+lose  - find
+loss  - win
+loud  - quiet
+love  - hate
+low  - high
+loyal  - disloyal
+mad  - happy
+major  - minor
+many  - few
+mature  - immature
+maximum  - minimum
+melt  - freeze
+merry  - sad
+messy  - neat
+minor  - major
+minority  - majority
+miser  - spendthrift
+misunderstand  - understand
+more  - less
+nadir  - zenith
+narrow  - wide
+near  - far
+neat  - messy
+never  - always
+new  - old
+night  - day
+nighttime  - daytime
+no  - yes
+noisy  - quiet
+none  - some
+north  - south
+obedient  - disobedient
+odd  - even
+offer  - refuse
+old  - young
+old  - new
+on  - off
+open  - closed
+opposite- same
+optimist  - pessimist
+out  - in
+outer  - inner
+over  - under
+P
+past  - present
+patient  - impatient
+peace  - war
+permanent  - temporary
+plentiful  - scarce
+plural  - singular
+poetry  - prose
+polite  - rude
+possible  - impossible
+poverty  - wealth
+powerful  - weak
+pretty  - ugly
+private  - public
+prudent  - imprudent
+pure  - impure
+push  - pull
+qualified  - unqualified
+question  - answer
+quiet  - loud
+raise  - lower
+rapid  - slow
+rare  - common
+regular  - irregular
+real  - fake
+rich  - poor
+right  - left
+right-side-up  - upside-down
+rough  - smooth
+rude  - courteous
+safe  - unsafe
+same  - opposite
+satisfactory  - unsatisfactory
+secure  - insecure
+scatter  - collect
+separate  - join
+serious  - trivial
+second-hand  - new
+shallow  - deep
+shrink  - grow
+sick  - healthy
+simple  - complex
+singular  - plural
+sink  - float
+slim  - fat
+slow  - fast
+sober  - drunk
+soft  - hard
+some  - none
+sorrow  - joy
+sour  - sweet
+sow  -reap
+straight  - crooked
+start  - finish
+stop  - go
+strict  - lenient
+strong  - weak
+success  - failure
+sunny  - cloudy
+synonym  - antonym
+sweet  - sour
+take  - give
+tall  - short
+tame  - wild
+them  - us
+there  - here
+thick  - thin
+tight  - loose
+tiny  - big
+together  - apart
+top  - bottom
+tough  - easy
+transparent  - opaque
+true  - false
+truth  - flasehood
+under  - over
+unfold  - fold
+unknown  - known
+unqualified  - qualified
+unsafe  - safe
+up  - down
+upside-down  - right-side-up
+upstairs  - downstairs
+us  - them
+useful  - useless
+vacant  - occupied
+vanish  - appear
+vast  - tiny
+victory  - defeat
+virtue  - vice
+visible  - invisible
+voluntary  - compulsory
+war  - peace
+wax  - wane
+weak  - strong
+white  - black
+wide  - narrow
+win  - lose
+wisdom  - folly
+within  - outside
+wrong  - right
+wet  - dry
+yes  - no
+yin  - yang
+young  - old
+zip  - unzip
+zenith  - nadir
+Good - Bad
+Highly addictive - Mildly addictive
+Cold - Hot
+Weird - Normal
+Colorful - Colorless
+High calorie - Low calorie
+Feels good - Feels bad
+Essential - Inessential
+Expensive - Cheap
+Overrated weapon - Underrated weapon
+Common - Rare
+Hard subject  - Easy subject
+Famous - Unknown
+Easy to use - Difficult to use
+Wired - Normal
+Clean - Dirty
+Requires skill - Requires luck
+Flavorful - Flavorless
+Fascinating topic - Boring topic
+Good actors - Bad actor
+Hipster - Basic
+Safe job - Dangerous job
+Sci-Fi - Fantasy
+Formal - Casual
+Overpaid - Underpaid
+Wet - Dry
+Overrated skill - Underrated skill
+Encouraged - Forbidden
+Happy song - Sad song
+Durable - Fragile
+Dork - Geek
+Evil - Good
+Best day of the year - Worst day of the year
+Good habit - Bad habit
+Dog person - Cat person
+Openly love - Guilty pleasure
+Talented - Untalented
+Light - Dark
+Overrated actor  - Underrated actor-
+Easy to find - Hard to find
+Beautiful man - Ugly man
+Easy to remember - Hard to remember
+Highbrow - Lowbrow
+Healthy - Unhealthy
+Good man - Bad man
+Historically irrelevant - Historically important
+Hairy - Hairless
+Flexible - Inflexible
+Exotic pet - Normal pet
+Extrovert - Introvert
+Movie was better - Book was better
+Good movie - Bad movie
+Beautiful - Ugly
+Happens suddenly - Happens slowly
+Career - Job
+Hated - Loved
+The Dark Side of the Force - The Light Side of the Force
+Good pizza topping - Bad pizza topping
+Utopia - Dystopia
+Immature person - Mature person
+Overrated thing to own - Underrated thing to own
+Nice person - Mean person
+Adventure movie - Action movie
+Good - Bad
+Highly addictive - Mildly addictive
+Cold - Hot
+Weird - Normal
+Colorful - Colorless
+High calorie - Low calorie
+Feels good - Feels bad
+Essential - Inessential
+Expensive - Cheap
+Overrated weapon - Underrated weapon
+Common - Rare
+Sexy - Unsexy
+Hard subject -  Physics - Easy subject
+Famous - Unknown
+Easy to use - Difficult to use
+Wired - Tired
+Clean - Dirty
+Requires skill - Requires luck
+Flavorful - Flavorless
+Fascinating topic - Boring topic
+Good actor - Bad actor
+Good - Bad
+Highly addictive - Mildly addictive
+Cold - Hot
+Weird - Normal
+Colorful - Colorless
+High calorie - Low calorie
+Feels good - Feels bad
+Essential - Inessential
+Expensive - Cheap
+Overrated weapon - Underrated weapon
+Common - Rare
+Sexy - Unsexy
+Hard subject -  Physics - Easy subject
+Famous - Unknown
+Easy to use - Difficult to use
+Wired - Tired
+Clean - Dirty
+Requires skill - Requires luck
+Flavorful - Flavorless
+Good - Bad
+Highly addictive - Mildly addictive
+Cold - Hot
+Weird - Normal
+Colorful - Colorless
+High calorie - Low calorie
+Feels good - Feels bad
+Essential - Inessential
+Expensive - Cheap
+Overrated weapon - Underrated weapon
+Believable - Unbelievable
+Classy - Trashy
+Permanent - Temporary
+Doesn't look like a person - Looks like a person
+Tastes good - Tastes bad
+Game - Sport
+Cool - Uncool
+Greatest living person - Worst living person
+Overrated - Underrated
+Clean food - Messy food
+Ethical - Unethical
+Good gift - Bad gift
+Fashionable - Unfashionable
+Terrorist - Freedom fighter
+Forgiveable - Unforgiveable
+Harmful - Harmless
+Hygienic - Unhygienic
+Good music - Bad music
+Useful - Useless
+art - Movie that Godzilla would ruin
+Important - Unimportant
+Hard to spell - Easy to spell
+Virtue - Vice
+Overrated musician - Underrated musician
+Popular activity - Unpopular activity
+Whole - Divided
+Reliable - Unreliable
+Hard to kill - Easy to kill
+Stable - Unstable
+Pointy animal - Round animal
+Good TV show - Bad TV show
+Traditionally feminine - Traditionally masculine
+Useful body part - Useless body part
+Classic - Fad
+Brilliant - Stupid
+Strong - Weak
+Useful invention - Useless invention
+Conservative - Liberal
+Popular - Unpopular
+Enemy - Friend
+Exciting - Boring
+Smelly in a good way - Smelly in a bad way
+Hero - Villain
+Overrated thing to do - Underrated thing to do
+Useful in an emergency - Useless in an emergency
+For adults - For kids
+Hard to do - Easy to do
+Priceless - Worthless
+Nurture - Nature
+Democracy - Dictatorship
+Weird greeting - Normal greeting
+Cat name - Dog name
+Partisan - Non-partisan
+Infinite - Limited
+Formal event - Casual event
+Good investment - Bad investment
+Heavy topic - Small talk
+Spicy - Mild
+Sacrilegious - Religious
+Art - Not art
+Prohibited - Illegal
+Elitist - Popular
+In control - Out of control
+Loud - Quiet
+Public knowledge - Secret
+Too big - Too small
+Long - Short
+Best year in history - Worst year in history
+Capitalist - Socialist
+Well known fact - Little known fact
+Mobile - Stationary
+Global issue - Local issue
+Skill - Talent
+Best era to time travel - Worst era to time travel
+The best - The worst
+Large number - Small number
+`False - `True
+Avant garde - Old fashioned
+Beautiful word - Ugly word
+Tiny - Small
+Natural - Unnatural
+Phony person - Genuine person
+Original - Derivative
+Sexy color - Unsexy color
+Benefits everyone - Benefits you
+Powerful - Powerless
+Vapes - Doesn’t vape
+Vegetable - Fruit
+Pseudoscience - Science
+Serious topic - Funny topic
+Firm - Limp
+News - Gossip
+Easy to sit on - Hard to sit on
+Too much - Not enough
+Vertical - Horizontal
+Scented - Unscented
+Not huggable - Huggable
+Homogenous - Heterogeneous
+Exclusive - Inclusive
+Good dog breed - Bad dog breed
+Commerce - Art
+Pop icon - One hit wonder
+Good advice - Bad advice
+Good candy - Bad candy- licorice
+Radical - Traditional
+Good mouthfeel - Bad mouthfeel
+Legal - Illegal
+Shallow thought - Deep thought
+Good school - Bad school
+Always on time - Never on time
+Will live to 100 - Won't live to 100
+Good Disney character - Bad Disney character
+Good president - Bad president
+Strange - Weird
+Infamous - Famous
+Most powerful god - Least powerful god
+Fun person - Boring person
+Overrated book - Underrated book
+Best chore - Worst chore
+Overpopulated species - Endangered species
+Green - weed - Blue- blue man group
+Terrifying - Thrilling
+Unexpected - Expected
+Person who’d beat you up - Person you could beat up
+Overrated game - Underrated game
+You don't want your parents to watch you do it - You want your parents to watch you do it
+Evil people - Good people
+jock  - nerd
