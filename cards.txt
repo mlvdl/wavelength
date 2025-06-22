@@ -253,7 +253,6 @@ optimist  - pessimist
 out  - in
 outer  - inner
 over  - under
-P
 past  - present
 patient  - impatient
 peace  - war
@@ -435,7 +434,7 @@ Expensive - Cheap
 Overrated weapon - Underrated weapon
 Common - Rare
 Sexy - Unsexy
-Hard subject -  Physics - Easy subject
+Hard subject - Easy subject
 Famous - Unknown
 Easy to use - Difficult to use
 Wired - Tired
@@ -492,7 +491,8 @@ Harmful - Harmless
 Hygienic - Unhygienic
 Good music - Bad music
 Useful - Useless
-art - Movie that Godzilla would ruin
+Art - Not Art
+Movie that Godzilla would make better - Movie that Godzilla would ruin
 Important - Unimportant
 Hard to spell - Easy to spell
 Virtue - Vice
@@ -549,7 +549,7 @@ Skill - Talent
 Best era to time travel - Worst era to time travel
 The best - The worst
 Large number - Small number
-`False - `True
+False - True
 Avant garde - Old fashioned
 Beautiful word - Ugly word
 Tiny - Small
@@ -593,7 +593,7 @@ Fun person - Boring person
 Overrated book - Underrated book
 Best chore - Worst chore
 Overpopulated species - Endangered species
-Green - weed - Blue- blue man group
+Green - Blue
 Terrifying - Thrilling
 Unexpected - Expected
 Person who’d beat you up - Person you could beat up

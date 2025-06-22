@@ -1,134 +1,183 @@
 use std::fs::File;
 use std::io;
 use std::io::BufRead;
-use std::path::Path;
+
 use std::process::exit;
 use rand::Rng;
-use colors::{BLUE, CYAN, GREEN, MAGENTA, RED, YELLOW};
+use crate::colors::RESET;
 
 mod prints;
 mod utils;
 mod colors;
 
 
+const WIDTH: usize = 75;
+
+struct GameParams {
+    spectrum: (i32, i32),
+    n_rounds: usize,
+    file: String,
+}
+
+struct GameState {
+    round: usize,
+    score: i32,
+    color_code: String,
+    card: String,
+    target: i32,
+}
+
 fn main() {
-    println!("Welcome to the digital cooperative version of Wavelength!");
-    prints::print_banner();
-    println!("How to play:");
-    println!("The objective of Wavelength is to give your teammates a clue allowing them to accurately predict where to target on a spectrum. \
-    \nIf you get more than 15 points, you win!");
+    prints::print_welcome_message();
 
     // Define the spectrum
-    let mut end = 10;
-    start_menu(&mut end);
-    let spectrum = 0..=end;
+    let mut game_params = GameParams {
+        spectrum: (0, 10),
+        n_rounds: 7,
+        file: String::from("cards.txt"),
+        
+    };
+    let mut game_state = GameState {
+        round: 0,
+        score: 0,
+        color_code: RESET.to_string(),
+        card: String::new(),
+        target: -1,
+    };
+    start_menu(&mut game_params);
     utils::clear_terminal();
+
     println!("The spectrum is: ");
-    prints::print_spectrum(*spectrum.start(), *spectrum.end());
+    prints::print_spectrum(game_params.spectrum.0, game_params.spectrum.1);
 
-    // Draw card
-    let path = Path::new("cards.txt");
+    let lines = read_cards(&mut game_params);
 
-    let file = File::open(path);
+    let color_map = utils::get_color_map(0, game_params.n_rounds as i32);
+    for round in 0..game_params.n_rounds {
+        game_state.round = round + 1;
+        game_state.color_code = color_map[game_state.round].clone();
+
+        wait_for_enter(&game_state, format!("\nPress enter (↵) to start round {}.", game_state.round));
+        clear(&game_params, &game_state);
+
+        draw_card(&lines, &game_params, &mut game_state);
+        get_hidden_target(&mut game_params, &mut game_state);
+
+        clear(&game_params, &game_state);
+
+        prints::print_card(&game_state);
+
+        wait_for_enter(&game_state, "Psychic, please give a clue (e.g., a word or phrase)".to_string());
+        clear(&game_params, &game_state);
+
+        prints::print_card(&game_state);
+
+        println!("Guesser, please guess the position on the spectrum ({}, {}):", game_params.spectrum.0, game_params.spectrum.1);
+        let guess = utils::read_number(game_params.spectrum.0, game_params.spectrum.1);
+
+        let round_points = get_round_points(game_state.target, guess);
+        let color_code = utils::get_color(game_state.target, game_params.spectrum.1);
+        println!("The hidden target was at position {}{}{}.", color_code, game_state.target, RESET);
+        game_state.target = -1;
+
+        game_state.score += round_points;
+        print!("You got {} points in this round!", round_points);
+        println!(" That's a total of {} points!", game_state.score);
+    }
+    prints::print_final_scores(game_state.score);
+}
+
+fn clear(game_params: &GameParams, game_state: &GameState) {
+    utils::clear_terminal();
+    println!("{}############################### ROUND {} / {} ################################",
+             game_state.color_code, game_state.round, game_params.n_rounds);
+    println!("Score: {}", game_state.score);
+    println!("{}", RESET);
+    println!("Spectrum:");
+    prints::print_spectrum(game_params.spectrum.0, game_params.spectrum.1);
+
+}
+
+fn wait_for_enter(game_state: &GameState, message: String) {
+    println!("{}", message);
+    let mut answer = String::new();
+    if game_state.target != -1 {
+        println!("If you need to see the hidden target again press (t).");
+    }
+    io::stdin().read_line(&mut answer).expect("Failed to read line");
+    if answer.trim().to_lowercase() == "t" {
+        println!("Hidden target position: {}", game_state.target);
+        io::stdin().read_line(&mut answer).expect("Failed to read line");
+    }
+}
+
+fn get_round_points(hidden_target: i32, guess: i32) -> i32 {
+    let round_points;
+    if guess == hidden_target {
+        round_points = 4;
+        print!("Congratulations!")
+    } else if guess - 1 == hidden_target || guess + 1 == hidden_target {
+        round_points = 3;
+        print!("Quite close!");
+    } else if guess - 2 == hidden_target || guess + 2 == hidden_target {
+        round_points = 2;
+        print!("Not bad!");
+    } else {
+        round_points = 0;
+        print!("Sorry, that wasn't even close...");
+    }
+    round_points
+}
+
+fn get_hidden_target(game_params: &GameParams, game_state: &mut GameState) {
+    let mut answer = String::new();
+    loop {
+        answer.clear();
+        // Randomly select a hidden target on the spectrum
+        game_state.target = rand::rng().random_range(game_params.spectrum.0..=game_params.spectrum.1);
+        println!("The hidden target is at position: {}", game_state.target);
+
+        // Wait for user input to clear the terminal
+        println!("Press enter (↵) to clear the terminal. (Press (n) if you need a new hidden target)");
+        io::stdin().read_line(&mut answer).expect("Failed to read line");
+
+        let answer = answer.trim();
+        if answer != "n" { break; } else {
+            clear(&game_params, &game_state);
+            prints::print_card(&game_state);
+        }
+    }
+}
+
+fn read_cards(game_params: &GameParams) -> Vec<String> {
+    let file = File::open(game_params.file.clone());
     let mut lines = Vec::new();
     for line in io::BufReader::new(file.unwrap()).lines() {
         lines.push(line.unwrap());
     }
-
-    let mut total_points = 0;
-    let n_rounds = 7;
-    let mut answer = String::new();
-
-    let color_map = utils::get_color_map(*spectrum.start(), *spectrum.end());
-    for round in 1..n_rounds + 1 {
-        println!("\nPress enter to start round {}.", round);
-        let color_code = &color_map[round];
-
-        io::stdin().read_line(&mut answer).expect("Failed to read line");
-        utils::clear_terminal();
-
-        prints::print_round_banner(round, color_code);
-
-        let mut card_content ;
-        loop {
-            answer.clear();
-            let mut rng = rand::rng();
-            let random_index = rng.random_range(0..lines.len());
-            card_content = &lines[random_index];
-            println!("You draw the following card:");
-            prints::print_card(card_content, color_code);
-            println!("Press enter to see the hidden target is. Psst... make sure that only the psychic sees it! (Press (n) to get a new card)");
-            io::stdin()
-                .read_line(&mut answer)
-                .expect("Failed to read line");
-            let answer = answer.trim();
-            if answer != "n" { break; }
-        }
-
-        // Randomly select a hidden target on the spectrum
-        let mut rng = rand::rng();
-        let hidden_target = rng.random_range(spectrum.clone());
-        println!("The hidden target is at position: {}", hidden_target);
-
-        // Wait for user input to clear the terminal
-        println!("Press Enter to clear the terminal...");
-        let mut input = String::new();
-        io::stdin().read_line(&mut input).unwrap();
-        utils::clear_terminal();
-
-        prints::print_round_banner(round, color_code);
-
-        println!("The card is:");
-        prints::print_card(card_content, color_code);
-
-        // The Psychic gives a clue
-        println!("Psychic, please give a clue (e.g., a word or phrase):");
-        let mut clue = String::new();
-        io::stdin().read_line(&mut clue).expect("Failed to read line");
-
-        // The Guesser tries to guess the position
-        println!("Guesser, please guess the position on the spectrum ({}, {}):", *spectrum.start(), *spectrum.end());
-        prints::print_spectrum(*spectrum.start(), *spectrum.end());
-
-        let guess = utils::read_number(0, end);
-
-        // Check if the guess is correct
-        let round_points ;
-        if guess == hidden_target {
-            round_points = 4;
-            print!("Congratulations!")
-        } else if guess - 1 == hidden_target || guess + 1 == hidden_target {
-            round_points = 3;
-            print!("Quite close!");
-        } else if guess - 2 == hidden_target || guess + 2 == hidden_target {
-            round_points = 2;
-            print!("Not bad!");
-        } else {
-            round_points = 0;
-            print!("Sorry, that wasn't even close...");
-        }
-        println!("The hidden target was at position {}.", hidden_target);
-
-        total_points += round_points;
-        print!("You got {} points in this round!", round_points);
-        println!(" That's a total of {} points!", total_points);
-    }
-
-    if total_points <= 3 { println!("{}Are you sure it’s plugged in?", RED); }
-    else if total_points <= 6 { println!("{}Try turning it off and back on again.", YELLOW); }
-    else if total_points <= 9 { println!("{}Blow into the bottom of the device.", GREEN); }
-    else if total_points <= 12 { println!("{}Not bad! Not great, but not bad.", CYAN); }
-    else if total_points <= 15 { println!("{}So close!", CYAN); }
-    else if total_points <= 18 { println!("{}You won!", BLUE); }
-    else if total_points <= 21 { println!("{}You’re on the same... wavelength.", BLUE); }
-    else if total_points <= 24 { println!("{}Galaxy brain.", MAGENTA); }
-    else { println!("{} Head exploding emoji!", MAGENTA)}
-
-    if total_points > 15 { prints::print_win(); }
-    else { prints::print_lose();}
+    lines
 }
 
-fn start_menu(end: &mut i32) {
+fn draw_card(lines: &Vec<String>, game_params: &GameParams, game_state: &mut GameState) {
+    let mut answer = String::new();
+
+    loop {
+        answer.clear();
+        let random_index = rand::rng().random_range(0..lines.len());
+        game_state.card = lines[random_index].clone();
+        println!("You draw the following card:");
+        prints::print_card(&game_state);
+        println!("Press enter (↵) to see the hidden target is. Psst... make sure that only the psychic sees it!");
+        println!("(Press (n) if you need a new card)");
+        io::stdin()
+            .read_line(&mut answer)
+            .expect("Failed to read line");
+        let answer = answer.trim();
+        if answer != "n" { break; } else { clear(&game_params, &game_state) }
+    }
+}
+
+fn start_menu(game_params: &mut GameParams) {
     let mut answer = String::new();
     loop {
         println!("Press (p) to change the default parameters, (h) to see how to play, (q) to quit, enter (↵) to continue.");
@@ -138,7 +187,7 @@ fn start_menu(end: &mut i32) {
             prints::print_help();
         } else if answer.trim().to_string() == "p" {
             println!("Set the upper limit of the spectrum:");
-            *end = utils::read_number(0, 100);
+            game_params.spectrum.1 = utils::read_number(0, 100);
         } else if answer.trim().to_string() == "q" {
             exit(0);
         } else {
