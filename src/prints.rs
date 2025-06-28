@@ -31,7 +31,7 @@ pub fn print_banner() {
     println!("{} \\ V  V / (_| |\\ V /  __/ |  __/ | | | (_| | |_| | | |", CYAN);
     println!("{}  \\_/\\_/ \\__,_| \\_/ \\___|_|\\___|_| |_|\\__, |\\__|_| |_|", BLUE);
     println!("{}                                      |___/                 ", MAGENTA);
-    println!("{}", RESET);
+    print!("{}", RESET);
     print_hashtags();
 }
 
