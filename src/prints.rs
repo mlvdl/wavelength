@@ -101,7 +101,7 @@ pub fn print_welcome_message() {
     println!("How to play:");
     println!("The objective of Wavelength is to give your teammates a clue allowing them to \
     accurately predict where to target on a spectrum. \
-    \nIf you get more than 15 points, you win!");
+    \nIf you get more than 15 points, you win!\n");
 }
 
 pub fn print_hashtags() {
