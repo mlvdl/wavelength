@@ -1,6 +1,6 @@
-use std::process::Command;
-use std::io;
 use crate::prints;
+use std::io;
+use std::process::Command;
 
 pub fn clear_terminal() {
     if cfg!(target_os = "windows") {
@@ -50,32 +50,24 @@ pub fn get_color(value: i32, max_value: i32) -> String {
     rgb_to_ansi(r, g, b)
 }
 
-pub fn get_color_map(start: i32, end: i32) -> Vec<String> {
-    let mut color_map = vec![];
-    if start == end {
-        color_map.push("\x1b[0m".to_string());
-        return color_map;
-    }
-
-    for value in start..=end {
-        let color = get_color(value - start, end - start);
-        color_map.push(color);
-    }
-    color_map
-}
-
 pub fn read_number(min: i32, max: i32) -> i32 {
     let guess: i32;
     loop {
         let mut input = String::new();
-        io::stdin().read_line(&mut input).expect("Failed to read line");
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read line");
         match input.trim().parse::<i32>() {
             Ok(num) if (min <= num) & (num <= max) => {
                 guess = num;
                 break;
             }
-            Ok(_) => { println!("The number must be between {} and {}.", min, max); }
-            Err(_) => { println!("Please enter a valid number."); }
+            Ok(_) => {
+                println!("The number must be between {} and {}.", min, max);
+            }
+            Err(_) => {
+                println!("Please enter a valid number.");
+            }
         }
     }
     guess
