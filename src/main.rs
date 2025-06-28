@@ -11,7 +11,7 @@ mod utils;
 mod colors;
 
 
-const WIDTH: usize = 75;
+const WIDTH: usize = 55;
 
 struct GameParams {
     spectrum: (i32, i32),
@@ -89,7 +89,7 @@ fn main() {
 
 fn clear(game_params: &GameParams, game_state: &GameState) {
     utils::clear_terminal();
-    println!("{}############################### ROUND {} / {} ################################",
+    println!("{}##################### ROUND {} / {} ######################",
              game_state.color_code, game_state.round, game_params.n_rounds);
     println!("Score: {}", game_state.score);
     println!("{}", RESET);
