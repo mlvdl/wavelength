@@ -100,7 +100,7 @@ pub fn print_welcome_message() {
     println!("Welcome to the digital cooperative version of Wavelength!\n");
     println!("How to play:");
     println!("The objective of Wavelength is to give your teammates a clue allowing them to \
-    \naccurately predict where to target on a spectrum. \
+    accurately predict where to target on a spectrum. \
     \nIf you get more than 15 points, you win!");
 }
 
