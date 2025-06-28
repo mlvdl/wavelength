@@ -1,6 +1,7 @@
 pub mod cooperative;
 pub mod competitive;
 
+
 pub enum ActiveGameMode {
     Cooperative(cooperative::CooperativeMode),
     Competitive(competitive::CompetitiveMode),

@@ -1,13 +1,16 @@
 use crate::config::game_config::GameConfig;
 use crate::game::modes::GameMode;
+use crate::GameState;
 
 pub struct CompetitiveMode {
-    config: GameConfig,
+    pub config: GameConfig,
 }
 
 impl CompetitiveMode {
     pub fn new(config: GameConfig) -> Self {
-        CompetitiveMode { config }    
+        println!("The weak compete. The strong dominate.");
+        CompetitiveMode { config }
+
     }
 }
 

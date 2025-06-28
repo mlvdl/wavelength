@@ -2,11 +2,13 @@ use crate::config::game_config::GameConfig;
 use crate::game::modes::GameMode;
 
 pub struct CooperativeMode {
-    config: GameConfig,
+    pub config: GameConfig,
+
 }
 
 impl CooperativeMode {
     pub fn new(config: GameConfig) -> Self {
+        println!("Unity makes strength.");
         CooperativeMode { config }    
     }
 }
@@ -14,6 +16,7 @@ impl CooperativeMode {
 impl GameMode for CooperativeMode {
     fn setup(&mut self) {
         println!("Setting up cooperative mode");
+        dbg!("{:?}", &self.config);
     }
     
     fn play_round(&mut self) {
