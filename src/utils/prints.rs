@@ -1,6 +1,6 @@
-use crate::colors::{BLUE, CYAN, GREEN, MAGENTA, RED, RESET, YELLOW};
+use crate::utils::colors::{BLUE, CYAN, GREEN, MAGENTA, RED, RESET, YELLOW};
+use crate::utils::general::{clear_terminal, get_color};
 use crate::{utils, GameState, WIDTH};
-use crate::utils::clear_terminal;
 
 pub fn print_lose() {
     print!("{} ", RED);
@@ -53,7 +53,7 @@ pub fn print_help() {
 pub fn print_spectrum(start: i32, end: i32) {
     let mut message = String::new();
     for value in start..=end {
-        let color = utils::get_color(value - start, end - start);
+        let color = get_color(value - start, end - start);
         message += &format!("{} {} {}", color, value, "\x1b[0m");
     }
     let message_length: usize = (start..end).map(|i| if i < 10 { 3 } else { 4 }).sum();
@@ -97,18 +97,15 @@ pub fn print_final_scores(total_points: i32) {
 
 pub fn print_welcome_message() {
     clear_terminal();
-    println!("Welcome to the digital cooperative version of Wavelength!\n");
-    println!("How to play:");
-    println!("The objective of Wavelength is to give your teammates a clue allowing them to \
-    \naccurately predict where to target on a spectrum. \
-    \nIf you get more than 15 points, you win!");
+    println!("Welcome to the digital version of Wavelength!\n");
+    
 }
 
 pub fn print_hashtags() {
     let start = 0;
     let end = WIDTH as i32;
     for value in start..=end {
-        let color = utils::get_color(value - start, end - start);
+        let color = get_color(value - start, end - start);
         print!("{}#{}", color, "\x1b[0m");
     }
     println!();
