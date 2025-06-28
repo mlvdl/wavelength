@@ -25,12 +25,12 @@ pub fn print_win() {
 
 pub fn print_banner() {
     print_hashtags();
-    println!("{}                          _                  _   _             ", RED);
-    println!("{} __      ____ ___   _____| | ___ _ __   __ _| |_| |__          " , YELLOW);
+    println!("{}                          _                  _   _          ", RED);
+    println!("{} __      ____ ___   _____| | ___ _ __   __ _| |_| |__       " , YELLOW);
     println!("{} \\ \\ /\\ / / _` \\ \\ / / _ \\ |/ _ \\ '_ \\ / _` | __| '_ \\", GREEN);
-    println!("{}  \\ V  V / (_| |\\ V /  __/ |  __/ | | | (_| | |_| | | |      ", CYAN);
+    println!("{}  \\ V  V / (_| |\\ V /  __/ |  __/ | | | (_| | |_| | | |   ", CYAN);
     println!("{}   \\_/\\_/ \\__,_| \\_/ \\___|_|\\___|_| |_|\\__, |\\__|_| |_|", BLUE);
-    println!("{}                                       |___/                   ", MAGENTA);
+    println!("{}                                       |___/                 ", MAGENTA);
     println!("{}", RESET);
     print_hashtags();
 }
