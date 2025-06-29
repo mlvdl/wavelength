@@ -1,20 +1,18 @@
+use crate::game_mode::GameMode;
 use std::fs::File;
 use std::io;
 use std::io::BufRead;
 
 use crate::colors::RESET;
+use crate::game_config::GameConfig;
+use crate::game_state::GameState;
+use crate::{prints, utils};
 use rand::Rng;
 use std::process::exit;
 
-use crate::GameConfig;
-use crate::GameState;
-
-use crate::prints;
-use crate::utils;
-
 pub struct CooperativeMode {
     state: GameState,
-    config: GameConfig,
+    pub config: GameConfig,
 }
 
 impl CooperativeMode {
@@ -25,10 +23,14 @@ impl CooperativeMode {
 
     fn clear(game_config: &GameConfig, game_state: &GameState) {
         utils::clear_terminal();
-        println!(
-            "{}############################### ROUND {} / {} ################################",
-            game_state.color_code, game_state.round, game_config.n_rounds
-        );
+        if game_config.n_rounds.is_some() {
+            println!(
+                "{}############################### ROUND {} / {} ################################",
+                game_state.color_code,
+                game_state.round,
+                game_config.n_rounds.unwrap()
+            );
+        }
         println!("Score: {}", game_state.score);
         println!("{}", RESET);
         println!("Spectrum:");
@@ -91,7 +93,7 @@ impl CooperativeMode {
             if answer != "n" {
                 break;
             } else {
-                CooperativeMode::clear(&game_config, &game_state);
+                Self::clear(&game_config, &game_state);
                 prints::print_card(&game_state);
             }
         }
@@ -105,10 +107,8 @@ impl CooperativeMode {
         }
         lines
     }
-
     fn draw_card(lines: &Vec<String>, game_config: &GameConfig, game_state: &mut GameState) {
         let mut answer = String::new();
-
         loop {
             answer.clear();
             let random_index = rand::rng().random_range(0..lines.len());
@@ -126,11 +126,10 @@ impl CooperativeMode {
             if answer != "n" {
                 break;
             } else {
-                CooperativeMode::clear(&game_config, &game_state)
+                Self::clear(&game_config, &game_state)
             }
         }
     }
-
     fn start_menu(game_config: &mut GameConfig) {
         let mut answer = String::new();
         loop {
@@ -145,7 +144,7 @@ impl CooperativeMode {
                 prints::print_help();
             } else if answer.trim().to_string() == "s" {
                 println!("Set the upper limit of the spectrum:");
-                game_config.spectrum.1 = utils::read_number(0, 100);
+                game_config.spectrum.1 = utils::read_number(0, 100, None);
             } else if answer.trim().to_string() == "q" {
                 exit(0);
             } else {
@@ -153,64 +152,54 @@ impl CooperativeMode {
             }
         }
     }
+    fn play_round(config: &GameConfig, mut game_state: &mut GameState) {
+        Self::clear(&config, &game_state);
+        let lines = Self::read_cards(&config);
+        Self::draw_card(&lines, &config, &mut game_state);
+        Self::get_hidden_target(&config, &mut game_state);
+        Self::clear(&config, &game_state);
+        prints::print_card(&game_state);
+        Self::wait_for_enter(
+            &game_state,
+            "Psychic, please give a clue (e.g., a word or phrase)".to_string(),
+        );
+        Self::clear(&config, &game_state);
+        prints::print_card(&game_state);
+        println!(
+            "Guesser, please guess the position on the spectrum ({}, {}):",
+            config.spectrum.0, config.spectrum.1
+        );
+        let guess = utils::read_number(config.spectrum.0, config.spectrum.1, None);
+        let round_points = Self::get_round_points(game_state.target, guess);
+        let color_code = utils::get_color(game_state.target, config.spectrum.1);
+        println!(
+            "The hidden target was at position {}{}{}.",
+            color_code, game_state.target, RESET
+        );
+        game_state.target = -1;
+        game_state.score += round_points;
+        print!("You got {} points in this round!", round_points);
+        println!(" That's a total of {} points!", game_state.score);
+    }
 }
 
-impl CooperativeMode {
-    pub fn play(&mut self) {
+impl GameMode for CooperativeMode {
+    fn play(&mut self) {
         Self::start_menu(&mut self.config);
 
-        for round in 0..self.config.n_rounds {
+        for round in 0..self.config.n_rounds.unwrap() {
             self.state.round = round + 1;
-            self.state.color_code =
-                utils::get_color(self.state.round as i32, self.config.n_rounds as i32);
+            self.state.color_code = utils::get_color(
+                self.state.round as i32,
+                self.config.n_rounds.unwrap() as i32,
+            );
 
             let msg = format!("\nPress enter (↵) to start round {}.", self.state.round);
-            CooperativeMode::wait_for_enter(&self.state, msg);
+            Self::wait_for_enter(&self.state, msg);
 
-            self.play_round();
+            Self::play_round(&self.config, &mut self.state);
         }
 
         prints::print_final_scores(self.state.score as i32);
     }
-
-    fn play_round(&mut self) {
-        CooperativeMode::clear(&self.config, &self.state);
-        let lines = CooperativeMode::read_cards(&mut self.config);
-        CooperativeMode::draw_card(&lines, &self.config, &mut self.state);
-        CooperativeMode::get_hidden_target(&mut self.config, &mut self.state);
-
-        CooperativeMode::clear(&self.config, &self.state);
-
-        prints::print_card(&self.state);
-
-        CooperativeMode::wait_for_enter(
-            &self.state,
-            "Psychic, please give a clue (e.g., a word or phrase)".to_string(),
-        );
-        CooperativeMode::clear(&self.config, &self.state);
-
-        prints::print_card(&self.state);
-
-        println!(
-            "Guesser, please guess the position on the spectrum ({}, {}):",
-            self.config.spectrum.0, self.config.spectrum.1
-        );
-        let guess = utils::read_number(self.config.spectrum.0, self.config.spectrum.1);
-
-        let round_points = CooperativeMode::get_round_points(self.state.target, guess);
-        let color_code = utils::get_color(self.state.target, self.config.spectrum.1);
-        println!(
-            "The hidden target was at position {}{}{}.",
-            color_code, self.state.target, RESET
-        );
-        self.state.target = -1;
-
-        self.state.score += round_points;
-        print!("You got {} points in this round!", round_points);
-        println!(" That's a total of {} points!", self.state.score);
-    }
-
-    // pub fn end_game(&self) {
-    //     println!("Cooperative game ended. Final state: {:?}", self.state);
-    // }
 }

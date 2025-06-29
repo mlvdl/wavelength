@@ -1,6 +1,8 @@
 use crate::colors::{BLUE, CYAN, GREEN, MAGENTA, RED, RESET, YELLOW};
+use crate::game_state::GameState;
+use crate::settings::WIDTH;
+use crate::utils;
 use crate::utils::clear_terminal;
-use crate::{GameState, WIDTH, utils};
 
 pub fn print_lose() {
     print!("{} ", RED);

@@ -1,48 +1,31 @@
+use crate::game_config::GameConfig;
+use crate::game_mode::GameMode;
+use crate::game_mode::competitive::CompetitiveMode;
+use crate::game_mode::cooperative::CooperativeMode;
+use crate::settings::SPECTRUM;
+use settings::N_TEAMS;
+
 mod colors;
-mod cooperative;
+mod game_config;
+mod game_mode;
+mod game_state;
 mod prints;
+mod settings;
 mod utils;
-
-const WIDTH: usize = 75;
-
-#[derive(Debug)]
-struct GameConfig {
-    spectrum: (i32, i32),
-    n_rounds: usize,
-    file: String,
-}
-struct GameState {
-    round: usize,
-    score: i32,
-    color_code: String,
-    card: String,
-    target: i32,
-}
-
-impl GameState {
-    fn new() -> Self {
-        GameState {
-            round: 0,
-            score: 0,
-            color_code: String::new(),
-            card: String::new(),
-            target: -1,
-        }
-    }
-}
 
 fn main() {
     prints::print_welcome_message();
+    println!("The spectrum is: ");
+    prints::print_spectrum(SPECTRUM.0, SPECTRUM.1);
 
-    let game_config = GameConfig {
-        spectrum: (0, 10),
-        n_rounds: 7,
-        file: String::from("cards.txt"),
+    println!("Choose the number of teams 1 or 2. [default: {N_TEAMS}]");
+    let n_teams = utils::read_number(1, 2, Some(N_TEAMS as i32));
+
+    let mut game: Box<dyn GameMode> = match n_teams {
+        1 => Box::new(CooperativeMode::new(GameConfig::new_cooperative())),
+        2 => Box::new(CompetitiveMode::new(GameConfig::new_competitive())),
+        _ => unreachable!(),
     };
 
-    println!("The spectrum is: ");
-    prints::print_spectrum(game_config.spectrum.0, game_config.spectrum.1);
-
-    let mut game = cooperative::CooperativeMode::new(game_config);
     game.play();
 }

@@ -50,15 +50,29 @@ pub fn get_color(value: i32, max_value: i32) -> String {
     rgb_to_ansi(r, g, b)
 }
 
-pub fn read_number(min: i32, max: i32) -> i32 {
+pub fn read_number(min: i32, max: i32, default: Option<i32>) -> i32 {
     let guess: i32;
     loop {
         let mut input = String::new();
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
+
+        // Check if input is empty and a default value is provided
+        if input.trim().is_empty() {
+            if let Some(default_value) = default {
+                guess = default_value;
+                break;
+            } else {
+                println!(
+                    "No input provided and no default value available. Please enter a number."
+                );
+                continue;
+            }
+        }
+
         match input.trim().parse::<i32>() {
-            Ok(num) if (min <= num) & (num <= max) => {
+            Ok(num) if num >= min && num <= max => {
                 guess = num;
                 break;
             }
