@@ -1,14 +1,17 @@
 use crate::game_mode::GameMode;
-use std::fs::File;
 use std::io;
 use std::io::BufRead;
 
-use crate::colors::{BLUE, RED, RESET};
+use crate::colors::RESET;
 use crate::game_config::GameConfig;
 use crate::game_state::GameState;
-use crate::{prints, utils};
+use crate::{game_mode, prints, utils};
 use rand::Rng;
 use std::process::exit;
+use crate::prints::{print_spectrum, print_team1_wins, print_team2_wins};
+use crate::settings::WIDTH;
+use crate::utils::get_color;
+
 pub struct CompetitiveMode {
     pub config: GameConfig,
     team1: GameState,
@@ -17,39 +20,49 @@ pub struct CompetitiveMode {
 
 impl CompetitiveMode {
     pub fn new(config: GameConfig) -> Self {
+        let rng1 = rand::random_range(0..=10);
+        let mut rng2 = rand::random_range(0..=10);
+        while rng2 == rng1 {
+            rng2 = rand::random_range(0..=10);
+        }
         CompetitiveMode {
             config,
             team1: GameState {
+                name: "Team1".to_string(),
                 round: 0,
                 score: 0,
-                color_code: RED.to_string(),
+                color_code: get_color(rng1, 10).to_string(),
                 card: String::new(),
                 target: -1,
             },
             team2: GameState {
+                name: "Team2".to_string(),
                 round: 0,
                 score: 1,
-                color_code: BLUE.to_string(),
+                color_code: get_color(rng2, 10).to_string(),
                 card: String::new(),
                 target: -1,
             },
         }
     }
 
-    fn clear(game_config: &GameConfig, game_state: &GameState) {
+    fn clear(&mut self) {
         utils::clear_terminal();
-        if game_config.n_rounds.is_some() {
-            println!(
-                "{}############################### ROUND {} / {} ################################",
-                game_state.color_code,
-                game_state.round,
-                game_config.n_rounds.unwrap()
-            );
+        let mut w = WIDTH / 2;
+        for _ in 0..w + 1{
+            print!("{}{}", self.team1.color_code, "#");
         }
-        println!("Score: {}", game_state.score);
-        println!("{}", RESET);
-        println!("Spectrum:");
-        prints::print_spectrum(game_config.spectrum.0, game_config.spectrum.1);
+        for _ in 0..w + 1{
+            print!("{}{}", self.team2.color_code, "#");
+        }
+        println!();
+        print!("{} Score: {}", self.team1.color_code, self.team1.score);
+        w = WIDTH - 18;
+        for _ in 0..w {
+            print!(" ");
+        }
+        print!("{} Score: {}", self.team2.color_code, self.team2.score);
+        println!("{}\n", RESET);
     }
 
     fn wait_for_enter(game_state: &GameState, message: String) {
@@ -67,24 +80,6 @@ impl CompetitiveMode {
                 .read_line(&mut answer)
                 .expect("Failed to read line");
         }
-    }
-
-    fn get_round_points(hidden_target: i32, guess: i32) -> i32 {
-        let round_points;
-        if guess == hidden_target {
-            round_points = 4;
-            print!("Congratulations!")
-        } else if guess - 1 == hidden_target || guess + 1 == hidden_target {
-            round_points = 3;
-            print!("Quite close!");
-        } else if guess - 2 == hidden_target || guess + 2 == hidden_target {
-            round_points = 2;
-            print!("Not bad!");
-        } else {
-            round_points = 0;
-            print!("Sorry, that wasn't even close...");
-        }
-        round_points
     }
 
     fn get_hidden_target(game_config: &GameConfig, game_state: &mut GameState) {
@@ -108,28 +103,20 @@ impl CompetitiveMode {
             if answer != "n" {
                 break;
             } else {
-                Self::clear(&game_config, &game_state);
+                // Self::clear();
                 prints::print_card(&game_state);
             }
         }
     }
 
-    fn read_cards(game_config: &GameConfig) -> Vec<String> {
-        let file = File::open(game_config.file.clone());
-        let mut lines = Vec::new();
-        for line in io::BufReader::new(file.unwrap()).lines() {
-            lines.push(line.unwrap());
-        }
-        lines
-    }
-
-    fn draw_card(lines: &Vec<String>, game_config: &GameConfig, game_state: &mut GameState) {
+    fn draw_card(game_config: &GameConfig, game_state: &mut GameState) {
         let mut answer = String::new();
         loop {
             answer.clear();
+            let lines = utils::read_lines(&game_config.file);
             let random_index = rand::rng().random_range(0..lines.len());
             game_state.card = lines[random_index].clone();
-            println!("You draw the following card:");
+            println!("{}{}{} draw the following card:", game_state.color_code, game_state.name, RESET);
             prints::print_card(&game_state);
             println!(
                 "Press enter (↵) to see the hidden target is. Psst... make sure that only the psychic sees it!"
@@ -142,10 +129,11 @@ impl CompetitiveMode {
             if answer != "n" {
                 break;
             } else {
-                Self::clear(&game_config, &game_state)
+                // Self::clear(&game_config, &game_state)
             }
         }
     }
+
     fn start_menu(game_config: &mut GameConfig) {
         let mut answer = String::new();
         loop {
@@ -168,34 +156,68 @@ impl CompetitiveMode {
             }
         }
     }
-    fn play_round(config: &GameConfig, mut game_state: &mut GameState) {
-        Self::clear(&config, &game_state);
-        let lines = Self::read_cards(&config);
-        Self::draw_card(&lines, &config, &mut game_state);
+    fn play_round(config: &GameConfig, mut game_state: &mut GameState) -> i32 {
+        Self::draw_card(&config, &mut game_state);
         Self::get_hidden_target(&config, &mut game_state);
-        Self::clear(&config, &game_state);
+
+        utils::clear_terminal();
         prints::print_card(&game_state);
         Self::wait_for_enter(
             &game_state,
             "Psychic, please give a clue (e.g., a word or phrase)".to_string(),
         );
-        Self::clear(&config, &game_state);
-        prints::print_card(&game_state);
         println!(
             "Guesser, please guess the position on the spectrum ({}, {}):",
             config.spectrum.0, config.spectrum.1
         );
+        print_spectrum(config.spectrum.0, config.spectrum.1);
         let guess = utils::read_number(config.spectrum.0, config.spectrum.1, None);
-        let round_points = Self::get_round_points(game_state.target, guess);
-        let color_code = utils::get_color(game_state.target, config.spectrum.1);
+
+        println!("Now the other team to guess \x1B[1mleft (l)\x1B[0m or \x1B[1mright (r)\x1B[0m.");
+        let mut left_right_guess = String::new();
+        io::stdin()
+            .read_line(&mut left_right_guess)
+            .expect("Failed to read line");
+        while !left_right_guess.trim().to_lowercase().starts_with('l') && !left_right_guess.trim().to_lowercase().starts_with('r') {
+            println!("Your guess {}", left_right_guess.trim().to_lowercase());
+            left_right_guess.clear();
+            println!("Not a valid choice. Enter \x1B[1mleft (l)\x1B[0m or \x1B[1mright (r)\x1B[0m.");
+            io::stdin()
+                .read_line(&mut left_right_guess)
+                .expect("Failed to read line");
+        }
+        let mut other_teams_point = 0;
+
+        if left_right_guess.trim().to_lowercase().starts_with('l') && guess < game_state.target {
+            other_teams_point += 1;
+        } else if left_right_guess.trim().to_lowercase().starts_with('r') && guess > game_state.target {
+            other_teams_point += 1;
+        }
+
+        let round_points = game_mode::get_round_points(game_state.target, guess);
+        let color_code = get_color(game_state.target, config.spectrum.1);
         println!(
             "The hidden target was at position {}{}{}.",
             color_code, game_state.target, RESET
         );
         game_state.target = -1;
         game_state.score += round_points;
-        print!("You got {} points in this round!", round_points);
-        println!(" That's a total of {} points!", game_state.score);
+        print!("{}{}{}: ", game_state.color_code, game_state.name, RESET);
+        print!("You got {}{}{} points in this round!",  game_state.color_code, round_points, RESET);
+        println!(" That's a total of {}{}{} points!", game_state.color_code, game_state.score, RESET);
+        other_teams_point
+    }
+
+    fn check_win(&mut self) -> bool {
+        if self.team1.score >= self.config.points_to_win {
+            print_team1_wins(&self.team1.color_code);
+            return true;
+        };
+        if self.team2.score >= self.config.points_to_win {
+            print_team2_wins(&self.team2.color_code);
+            return true;
+        };
+        false
     }
 }
 
@@ -208,18 +230,28 @@ impl GameMode for CompetitiveMode {
                 &self.team1,
                 "\nPress enter (↵) to start round for team 1".to_string(),
             );
-            Self::play_round(&self.config, &mut self.team1);
-            if self.team1.score > self.config.points_to_win {
-                break;
-            };
+            self.clear();
+            let team2_round_score = Self::play_round(&self.config, &mut self.team1);
+            if team2_round_score > 0 {
+                print!("{}{}{}: Nice guess, you got an extra point!", self.team2.color_code, self.team2.name, RESET);
+                self.team2.score += team2_round_score;
+            } else {
+                print!("{}{}{}: No extra point this time.", self.team2.color_code, self.team2.name, RESET);
+            }
+            if self.check_win() { break; }
             Self::wait_for_enter(
-                &self.team1,
-                "\nPress enter (↵) to start round for team 1".to_string(),
+                &self.team2,
+                "\nPress enter (↵) to start round for team 2".to_string(),
             );
-            if self.team1.score > self.config.points_to_win {
-                break;
-            };
-            Self::play_round(&self.config, &mut self.team2);
+            self.clear();
+            let team1_round_score = Self::play_round(&self.config, &mut self.team2);
+            if team1_round_score > 0 {
+                print!("{}{}{}: Nice guess, you got an extra point!", self.team1.color_code, self.team1.name, RESET);
+                self.team1.score += team1_round_score;
+            } else {
+                print!("{}{}{}: No extra point this time.", self.team1.color_code, self.team1.name, RESET);
+            }
+            if self.check_win() { break; }
         }
     }
 }

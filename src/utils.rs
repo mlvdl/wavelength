@@ -1,5 +1,7 @@
+use std::fs::File;
 use crate::prints;
 use std::io;
+use std::io::BufRead;
 use std::process::Command;
 
 pub fn clear_terminal() {
@@ -85,4 +87,13 @@ pub fn read_number(min: i32, max: i32, default: Option<i32>) -> i32 {
         }
     }
     guess
+}
+
+pub(crate) fn read_lines(file: &String) -> Vec<String> {
+    let file = File::open(file);
+    let mut lines = Vec::new();
+    for line in io::BufReader::new(file.unwrap()).lines() {
+        lines.push(line.unwrap());
+    }
+    lines
 }

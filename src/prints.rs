@@ -158,8 +158,7 @@ pub fn print_welcome_message() {
     println!("How to play:");
     println!(
         "The objective of Wavelength is to give your teammates a clue allowing them to \
-    \naccurately predict where to target on a spectrum. \
-    \nIf you get more than 15 points, you win!"
+    \naccurately predict where to target on a spectrum."
     );
 }
 
@@ -170,5 +169,25 @@ pub fn print_hashtags() {
         let color = utils::get_color(value - start, end - start);
         print!("{}#{}", color, "\x1b[0m");
     }
+    println!();
+}
+
+pub fn print_team1_wins(color: &str) {
+    println!("{}", color);
+    println!("            _                         _            _             _  ");
+    println!("           | |_ ___  __ _ _ __ ___   / | __      _(_)_ __  ___  | | ");
+    println!("           | __/ _ \\/ _` | '_ ` _ \\  | | \\ \\ /\\ / / | '_ \\/ __| | | ");
+    println!("           | ||  __/ (_| | | | | | | | |  \\ V  V /| | | | \\__ \\ |_| ");
+    println!("            \\__\\___|\\__,_|_| |_| |_| |_|   \\_/\\_/ |_|_| |_|___/ (_) ");
+    println!();
+}
+
+pub fn print_team2_wins(color: &str) {
+    println!("{}", color);
+    println!("          _                         ____             _             _    ");
+    println!("         | |_ ___  __ _ _ __ ___   |___ \\  __      _(_)_ __  ___  | |   ");
+    println!("         | __/ _ \\/ _` | '_ ` _ \\    __) | \\ \\ /\\ / / | '_ \\/ __| | |   ");
+    println!("         | ||  __/ (_| | | | | | |  / __/   \\ V  V /| | | | \\__ \\ |_|   ");
+    println!("          \\__\\___|\\__,_|_| |_| |_| |_____|   \\_/\\_/ |_|_| |_|___/ (_)   ");
     println!();
 }
