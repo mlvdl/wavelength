@@ -1,13 +1,11 @@
-use crate::game_mode::{get_round_points, GameMode};
+use crate::game_mode::{GameMode, get_round_points};
 use std::io;
-use std::io::BufRead;
 
 use crate::colors::RESET;
 use crate::game_config::GameConfig;
 use crate::game_state::GameState;
 use crate::{prints, utils};
 use rand::Rng;
-use std::process::exit;
 
 pub struct CooperativeMode {
     state: GameState,
@@ -80,7 +78,6 @@ impl CooperativeMode {
         }
     }
 
-
     fn draw_card(&mut self) {
         let mut answer = String::new();
         let lines = utils::read_lines(&self.config.file);
@@ -88,7 +85,7 @@ impl CooperativeMode {
             answer.clear();
             let random_index = rand::rng().random_range(0..lines.len());
             self.state.card = lines[random_index].clone();
-            println!("You draw the following card:");
+            // println!("You draw the following card:");
             prints::print_card(&self.state);
             println!(
                 "Press enter (↵) to see the hidden target is. Psst... make sure that only the psychic sees it!"
@@ -105,37 +102,14 @@ impl CooperativeMode {
             }
         }
     }
-    fn start_menu(game_config: &mut GameConfig) {
-        let mut answer = String::new();
-        loop {
-            println!(
-                "Press (s) to change the spectrum, (h) to see how to play, (q) to quit, enter (↵) to continue."
-            );
-            answer.clear();
-            io::stdin()
-                .read_line(&mut answer)
-                .expect("Failed to read line");
-            if answer.trim().to_string() == "h" {
-                prints::print_help();
-            } else if answer.trim().to_string() == "s" {
-                println!("Set the upper limit of the spectrum:");
-                game_config.spectrum.1 = utils::read_number(0, 100, None);
-            } else if answer.trim().to_string() == "q" {
-                exit(0);
-            } else {
-                break;
-            }
-        }
-    }
+
     fn play_round(&mut self) {
         self.clear();
         self.draw_card();
         self.get_hidden_target();
         self.clear();
         prints::print_card(&self.state);
-        self.wait_for_enter(
-            "Psychic, please give a clue (e.g., a word or phrase)".to_string(),
-        );
+        self.wait_for_enter("Psychic, please give a clue (e.g., a word or phrase)".to_string());
         self.clear();
         prints::print_card(&self.state);
         println!(
@@ -158,8 +132,6 @@ impl CooperativeMode {
 
 impl GameMode for CooperativeMode {
     fn play(&mut self) {
-        Self::start_menu(&mut self.config);
-
         for round in 0..self.config.n_rounds.unwrap() {
             self.state.round = round + 1;
             self.state.color_code = utils::get_color(

@@ -1,5 +1,5 @@
-use std::fs::File;
 use crate::prints;
+use std::fs::File;
 use std::io;
 use std::io::BufRead;
 use std::process::Command;
@@ -67,7 +67,7 @@ pub fn read_number(min: i32, max: i32, default: Option<i32>) -> i32 {
                 break;
             } else {
                 println!(
-                    "No input provided and no default value available. Please enter a number."
+                    "No input provided. Please enter a number."
                 );
                 continue;
             }

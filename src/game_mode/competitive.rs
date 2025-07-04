@@ -1,16 +1,13 @@
-use crate::game_mode::GameMode;
-use std::io;
-use std::io::BufRead;
-
 use crate::colors::RESET;
 use crate::game_config::GameConfig;
+use crate::game_mode::GameMode;
 use crate::game_state::GameState;
-use crate::{game_mode, prints, utils};
-use rand::Rng;
-use std::process::exit;
 use crate::prints::{print_spectrum, print_team1_wins, print_team2_wins};
 use crate::settings::WIDTH;
 use crate::utils::get_color;
+use crate::{game_mode, prints, utils};
+use rand::Rng;
+use std::io;
 
 pub struct CompetitiveMode {
     pub config: GameConfig,
@@ -49,10 +46,10 @@ impl CompetitiveMode {
     fn clear(&mut self) {
         utils::clear_terminal();
         let mut w = WIDTH / 2;
-        for _ in 0..w + 1{
+        for _ in 0..w + 1 {
             print!("{}{}", self.team1.color_code, "#");
         }
-        for _ in 0..w + 1{
+        for _ in 0..w + 1 {
             print!("{}{}", self.team2.color_code, "#");
         }
         println!();
@@ -116,7 +113,10 @@ impl CompetitiveMode {
             let lines = utils::read_lines(&game_config.file);
             let random_index = rand::rng().random_range(0..lines.len());
             game_state.card = lines[random_index].clone();
-            println!("{}{}{} draw the following card:", game_state.color_code, game_state.name, RESET);
+            // println!(
+            //     "{}{}{} draw the following card:",
+            //     game_state.color_code, game_state.name, RESET
+            // );
             prints::print_card(&game_state);
             println!(
                 "Press enter (↵) to see the hidden target is. Psst... make sure that only the psychic sees it!"
@@ -134,28 +134,6 @@ impl CompetitiveMode {
         }
     }
 
-    fn start_menu(game_config: &mut GameConfig) {
-        let mut answer = String::new();
-        loop {
-            println!(
-                "Press (s) to change the spectrum, (h) to see how to play, (q) to quit, enter (↵) to continue."
-            );
-            answer.clear();
-            io::stdin()
-                .read_line(&mut answer)
-                .expect("Failed to read line");
-            if answer.trim().to_string() == "h" {
-                prints::print_help();
-            } else if answer.trim().to_string() == "s" {
-                println!("Set the upper limit of the spectrum:");
-                game_config.spectrum.1 = utils::read_number(0, 100, None);
-            } else if answer.trim().to_string() == "q" {
-                exit(0);
-            } else {
-                break;
-            }
-        }
-    }
     fn play_round(config: &GameConfig, mut game_state: &mut GameState) -> i32 {
         Self::draw_card(&config, &mut game_state);
         Self::get_hidden_target(&config, &mut game_state);
@@ -178,10 +156,14 @@ impl CompetitiveMode {
         io::stdin()
             .read_line(&mut left_right_guess)
             .expect("Failed to read line");
-        while !left_right_guess.trim().to_lowercase().starts_with('l') && !left_right_guess.trim().to_lowercase().starts_with('r') {
+        while !left_right_guess.trim().to_lowercase().starts_with('l')
+            && !left_right_guess.trim().to_lowercase().starts_with('r')
+        {
             println!("Your guess {}", left_right_guess.trim().to_lowercase());
             left_right_guess.clear();
-            println!("Not a valid choice. Enter \x1B[1mleft (l)\x1B[0m or \x1B[1mright (r)\x1B[0m.");
+            println!(
+                "Not a valid choice. Enter \x1B[1mleft (l)\x1B[0m or \x1B[1mright (r)\x1B[0m."
+            );
             io::stdin()
                 .read_line(&mut left_right_guess)
                 .expect("Failed to read line");
@@ -190,7 +172,9 @@ impl CompetitiveMode {
 
         if left_right_guess.trim().to_lowercase().starts_with('l') && guess < game_state.target {
             other_teams_point += 1;
-        } else if left_right_guess.trim().to_lowercase().starts_with('r') && guess > game_state.target {
+        } else if left_right_guess.trim().to_lowercase().starts_with('r')
+            && guess > game_state.target
+        {
             other_teams_point += 1;
         }
 
@@ -203,8 +187,14 @@ impl CompetitiveMode {
         game_state.target = -1;
         game_state.score += round_points;
         print!("{}{}{}: ", game_state.color_code, game_state.name, RESET);
-        print!("You got {}{}{} points in this round!",  game_state.color_code, round_points, RESET);
-        println!(" That's a total of {}{}{} points!", game_state.color_code, game_state.score, RESET);
+        print!(
+            "You got {}{}{} points in this round!",
+            game_state.color_code, round_points, RESET
+        );
+        println!(
+            " That's a total of {}{}{} points!",
+            game_state.color_code, game_state.score, RESET
+        );
         other_teams_point
     }
 
@@ -223,8 +213,6 @@ impl CompetitiveMode {
 
 impl GameMode for CompetitiveMode {
     fn play(&mut self) {
-        Self::start_menu(&mut self.config);
-
         loop {
             Self::wait_for_enter(
                 &self.team1,
@@ -233,12 +221,20 @@ impl GameMode for CompetitiveMode {
             self.clear();
             let team2_round_score = Self::play_round(&self.config, &mut self.team1);
             if team2_round_score > 0 {
-                print!("{}{}{}: Nice guess, you got an extra point!", self.team2.color_code, self.team2.name, RESET);
+                print!(
+                    "{}{}{}: Nice guess, you got an extra point!",
+                    self.team2.color_code, self.team2.name, RESET
+                );
                 self.team2.score += team2_round_score;
             } else {
-                print!("{}{}{}: No extra point this time.", self.team2.color_code, self.team2.name, RESET);
+                print!(
+                    "{}{}{}: No extra point this time.",
+                    self.team2.color_code, self.team2.name, RESET
+                );
             }
-            if self.check_win() { break; }
+            if self.check_win() {
+                break;
+            }
             Self::wait_for_enter(
                 &self.team2,
                 "\nPress enter (↵) to start round for team 2".to_string(),
@@ -246,12 +242,20 @@ impl GameMode for CompetitiveMode {
             self.clear();
             let team1_round_score = Self::play_round(&self.config, &mut self.team2);
             if team1_round_score > 0 {
-                print!("{}{}{}: Nice guess, you got an extra point!", self.team1.color_code, self.team1.name, RESET);
+                print!(
+                    "{}{}{}: Nice guess, you got an extra point!",
+                    self.team1.color_code, self.team1.name, RESET
+                );
                 self.team1.score += team1_round_score;
             } else {
-                print!("{}{}{}: No extra point this time.", self.team1.color_code, self.team1.name, RESET);
+                print!(
+                    "{}{}{}: No extra point this time.",
+                    self.team1.color_code, self.team1.name, RESET
+                );
             }
-            if self.check_win() { break; }
+            if self.check_win() {
+                break;
+            }
         }
     }
 }
