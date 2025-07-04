@@ -66,9 +66,7 @@ pub fn read_number(min: i32, max: i32, default: Option<i32>) -> i32 {
                 guess = default_value;
                 break;
             } else {
-                println!(
-                    "No input provided. Please enter a number."
-                );
+                println!("No input provided. Please enter a number.");
                 continue;
             }
         }

@@ -5,7 +5,7 @@ use crate::game_state::GameState;
 use crate::prints::{print_spectrum, print_team1_wins, print_team2_wins};
 use crate::settings::WIDTH;
 use crate::utils::get_color;
-use crate::{game_mode, prints, utils};
+use crate::{prints, utils};
 use rand::Rng;
 use std::io;
 
@@ -105,6 +105,23 @@ impl CompetitiveMode {
             }
         }
     }
+    fn get_round_points(hidden_target: i32, guess: i32) -> i32 {
+        let round_points;
+        if guess == hidden_target {
+            round_points = 4;
+            // println!("Congratulations!")
+        } else if guess - 1 == hidden_target || guess + 1 == hidden_target {
+            round_points = 3;
+            // println!("Quite close!");
+        } else if guess - 2 == hidden_target || guess + 2 == hidden_target {
+            round_points = 2;
+            // println!("Not bad!");
+        } else {
+            round_points = 0;
+            // println!("Sorry, that wasn't even close...");
+        }
+        round_points
+    }
 
     fn draw_card(game_config: &GameConfig, game_state: &mut GameState) {
         let mut answer = String::new();
@@ -178,21 +195,21 @@ impl CompetitiveMode {
             other_teams_point += 1;
         }
 
-        let round_points = game_mode::get_round_points(game_state.target, guess);
+        let round_points = Self::get_round_points(game_state.target, guess);
         let color_code = get_color(game_state.target, config.spectrum.1);
         println!(
-            "The hidden target was at position {}{}{}.",
+            "\nThe hidden target was at position {}{}{}.",
             color_code, game_state.target, RESET
         );
         game_state.target = -1;
         game_state.score += round_points;
-        print!("{}{}{}: ", game_state.color_code, game_state.name, RESET);
+        print!("\n{}{}{} ", game_state.color_code, game_state.name, RESET);
         print!(
-            "You got {}{}{} points in this round!",
+            "got {}{}{} points in this round!",
             game_state.color_code, round_points, RESET
         );
         println!(
-            " That's a total of {}{}{} points!",
+            " That's a total of {}{}{} point(s)!",
             game_state.color_code, game_state.score, RESET
         );
         other_teams_point
@@ -216,19 +233,19 @@ impl GameMode for CompetitiveMode {
         loop {
             Self::wait_for_enter(
                 &self.team1,
-                "\nPress enter (↵) to start round for team 1".to_string(),
+                format!("\n\nPress enter (↵) to start round for {}", self.team1.name),
             );
             self.clear();
             let team2_round_score = Self::play_round(&self.config, &mut self.team1);
             if team2_round_score > 0 {
                 print!(
-                    "{}{}{}: Nice guess, you got an extra point!",
+                    "\n{}{}{}: got an extra point!",
                     self.team2.color_code, self.team2.name, RESET
                 );
                 self.team2.score += team2_round_score;
             } else {
                 print!(
-                    "{}{}{}: No extra point this time.",
+                    "\n{}{}{}: No extra point this time.",
                     self.team2.color_code, self.team2.name, RESET
                 );
             }
@@ -237,19 +254,19 @@ impl GameMode for CompetitiveMode {
             }
             Self::wait_for_enter(
                 &self.team2,
-                "\nPress enter (↵) to start round for team 2".to_string(),
+                format!("\n\nPress enter (↵) to start round for {}", self.team2.name),
             );
             self.clear();
             let team1_round_score = Self::play_round(&self.config, &mut self.team2);
             if team1_round_score > 0 {
                 print!(
-                    "{}{}{}: Nice guess, you got an extra point!",
+                    "\n{}{}{} got an extra point!",
                     self.team1.color_code, self.team1.name, RESET
                 );
                 self.team1.score += team1_round_score;
             } else {
                 print!(
-                    "{}{}{}: No extra point this time.",
+                    "\n{}{}{}: No extra point this time.",
                     self.team1.color_code, self.team1.name, RESET
                 );
             }

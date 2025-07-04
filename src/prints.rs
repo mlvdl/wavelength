@@ -120,7 +120,6 @@ pub fn print_spectrum(start: i32, end: i32) {
     println!();
 }
 
-
 pub fn print_final_scores(total_points: i32) {
     if total_points <= 3 {
         println!("{}Are you sure it’s plugged in?", RED);
@@ -169,7 +168,6 @@ pub fn print_hashtags() {
     println!();
 }
 
-
 pub fn print_card(game_state: &GameState) {
     let card_content = if game_state.card.len() >= WIDTH - 2 {
         &game_state.card.replace(" - ", " - \n")
@@ -206,8 +204,8 @@ pub fn print_card(game_state: &GameState) {
 
 #[cfg(test)]
 mod tests {
-    use crate::utils::read_lines;
     use super::*;
+    use crate::utils::read_lines;
 
     #[test]
     fn test_print_card() {

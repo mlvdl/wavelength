@@ -1,4 +1,4 @@
-use crate::game_mode::{GameMode, get_round_points};
+use crate::game_mode::GameMode;
 use std::io;
 
 use crate::colors::RESET;
@@ -77,6 +77,23 @@ impl CooperativeMode {
             }
         }
     }
+    fn get_round_points(hidden_target: i32, guess: i32) -> i32 {
+        let round_points;
+        if guess == hidden_target {
+            round_points = 4;
+            println!("Congratulations!")
+        } else if guess - 1 == hidden_target || guess + 1 == hidden_target {
+            round_points = 3;
+            println!("Quite close!");
+        } else if guess - 2 == hidden_target || guess + 2 == hidden_target {
+            round_points = 2;
+            println!("Not bad!");
+        } else {
+            round_points = 0;
+            println!("Sorry, that wasn't even close...");
+        }
+        round_points
+    }
 
     fn draw_card(&mut self) {
         let mut answer = String::new();
@@ -117,7 +134,7 @@ impl CooperativeMode {
             self.config.spectrum.0, self.config.spectrum.1
         );
         let guess = utils::read_number(self.config.spectrum.0, self.config.spectrum.1, None);
-        let round_points = get_round_points(self.state.target, guess);
+        let round_points = Self::get_round_points(self.state.target, guess);
         let color_code = utils::get_color(self.state.target, self.config.spectrum.1);
         println!(
             "The hidden target was at position {}{}{}.",
