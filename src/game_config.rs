@@ -57,7 +57,7 @@ pub fn start_menu() -> i32 {
             prints::print_help();
         } else if answer.trim().to_string() == "d" {
             println!(
-                "Set the level of difficulty:\
+                "Set the level of difficulty: [default: 1]\
             \n 1. Easy\
             \n 2. Medium\
             \n 3. Difficult\

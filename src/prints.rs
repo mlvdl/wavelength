@@ -76,30 +76,33 @@ pub fn print_team2_wins(color: &str) {
 }
 
 pub fn print_help() {
+    clear_terminal();
     println!(
-        "Wavelength is played over rounds, where the teammates will alternate playing the psychic."
+        "Wavelength is played over rounds, where the teammates will alternate playing the Psychic."
     );
-    println!("Each round consists of 4 phases.");
-    println!("1. Psychic Phase.");
-    println!("2. Team Phase.");
-    println!("3. Right/Left Phase.");
-    println!("4. Scoring Phase.");
+    println!("\nEach round consists of 4 phases.");
+    println!("1. Psychic Phase");
+    println!("2. Team Phase");
+    println!("3. Right/Left Phase");
+    println!("4. Scoring Phase");
     println!();
-    println!("1. Psychic draws a card. Wavelength cards list 2 opposite ends of a spectrum.");
+    println!("1. The Psychic draws a card -- Wavelength cards list 2 opposite ends of a spectrum.");
     println!(
-        "Psychic gets to see where the hidden target stands, and gives a clue for the target area's position."
+        "   The Psychic gets to see where the hidden target stands, and gives a clue for the target area's position."
     );
     println!(
-        "The clue can be up to 5 words, and should relate to the spectrum but be abstract enough to challenge the team."
+        "   The clue can be up to 5 words, and should relate to the spectrum but be abstract enough to challenge the team."
     );
     println!("2. Teammates try to guess where the hidden target is in the spectrum.");
     println!(
         "3. The opposing team gets to guess whether the hidden target is left or right of the other team's guess."
     );
     println!(
-        "4. Scores: 4 point if the target position is guessed, 3 points for +/-1, 2 points for +/-2, 0 otherwise. The opposing team gets 1 point if they guessed correctly"
+        "4. The first team to score 10 points wins.\n   \
+           Scores: 4 points if the target position is guessed, 3 points for +/-1, 2 points for +/-2, 0 otherwise.\n   \
+           The opposing team gets 1 point if they guessed the relative position correctly."
     );
-    println!("\nIn cooperative mode, the game is played over 7 rounds, and phase 3 is omitted.");
+    println!("\nIn cooperative mode, the game is played over 7 rounds. The team wins collectively if it scored 15 points. (Phase 3 is omitted)");
     println!("\nGood luck!\n");
 }
 

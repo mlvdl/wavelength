@@ -105,7 +105,7 @@ impl CooperativeMode {
             // println!("You draw the following card:");
             prints::print_card(&self.state);
             println!(
-                "Press enter (↵) to see the hidden target is. Psst... make sure that only the psychic sees it!"
+                "Press enter (↵) to see the hidden target is. Psst... make sure that only the Psychic sees it!"
             );
             println!("(Press (n) if you need a new card)");
             io::stdin()
