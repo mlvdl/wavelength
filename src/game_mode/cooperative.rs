@@ -22,7 +22,7 @@ impl CooperativeMode {
         utils::clear_terminal();
         if self.config.n_rounds.is_some() {
             println!(
-                "{}############################### ROUND {} / {} ################################",
+                "{}##################### ROUND {} / {} ######################",
                 self.state.color_code,
                 self.state.round,
                 self.config.n_rounds.unwrap()
