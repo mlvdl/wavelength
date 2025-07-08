@@ -171,12 +171,17 @@ pub fn print_card(game_state: &GameState) {
     } else {
         &game_state.card
     };
-    let max_length = &card_content.len();
-    let horizontal_border = format!("+{}+", "-".repeat(max_length + 2));
+    let message_length = &card_content.len();
+    let horizontal_border = format!("+{}+", "-".repeat(message_length + 2));
 
     println!("The drawn card is:");
     println!("{}", game_state.color_code);
-    let left_margin = (WIDTH - horizontal_border.len()) / 2;
+    let left_margin;
+    if message_length < &WIDTH {
+        left_margin = (WIDTH - message_length) / 2;
+    } else {
+        left_margin = 0;
+    }
     println!(
         "{:left_margin$}{}",
         "",
@@ -188,7 +193,7 @@ pub fn print_card(game_state: &GameState) {
         " \x1B[1m{:<width$}\x1B[0m{} |",
         card_content,
         game_state.color_code,
-        width = max_length
+        width = message_length
     );
     println!(
         "{:left_margin$}{}",
