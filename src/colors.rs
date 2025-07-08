@@ -7,4 +7,3 @@ pub const BLUE: &str = "\x1B[34m";
 pub const MAGENTA: &str = "\x1B[35m";
 pub const CYAN: &str = "\x1B[36m";
 const _WHITE: &str = "\x1B[37m";
-

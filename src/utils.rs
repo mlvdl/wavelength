@@ -1,6 +1,8 @@
-use std::process::Command;
-use std::io;
 use crate::prints;
+use std::fs::File;
+use std::io;
+use std::io::BufRead;
+use std::process::Command;
 
 pub fn clear_terminal() {
     if cfg!(target_os = "windows") {
@@ -50,33 +52,46 @@ pub fn get_color(value: i32, max_value: i32) -> String {
     rgb_to_ansi(r, g, b)
 }
 
-pub fn get_color_map(start: i32, end: i32) -> Vec<String> {
-    let mut color_map = vec![];
-    if start == end {
-        color_map.push("\x1b[0m".to_string());
-        return color_map;
-    }
-
-    for value in start..=end {
-        let color = get_color(value - start, end - start);
-        color_map.push(color);
-    }
-    color_map
-}
-
-pub fn read_number(min: i32, max: i32) -> i32 {
+pub fn read_number(min: i32, max: i32, default: Option<i32>) -> i32 {
     let guess: i32;
     loop {
         let mut input = String::new();
-        io::stdin().read_line(&mut input).expect("Failed to read line");
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read line");
+
+        // Check if input is empty and a default value is provided
+        if input.trim().is_empty() {
+            if let Some(default_value) = default {
+                guess = default_value;
+                break;
+            } else {
+                println!("No input provided. Please enter a number.");
+                continue;
+            }
+        }
+
         match input.trim().parse::<i32>() {
-            Ok(num) if (min <= num) & (num <= max) => {
+            Ok(num) if num >= min && num <= max => {
                 guess = num;
                 break;
             }
-            Ok(_) => { println!("The number must be between {} and {}.", min, max); }
-            Err(_) => { println!("Please enter a valid number."); }
+            Ok(_) => {
+                println!("The number must be between {} and {}.", min, max);
+            }
+            Err(_) => {
+                println!("Please enter a valid number.");
+            }
         }
     }
     guess
+}
+
+pub(crate) fn read_lines(file: &String) -> Vec<String> {
+    let file = File::open(file);
+    let mut lines = Vec::new();
+    for line in io::BufReader::new(file.unwrap()).lines() {
+        lines.push(line.unwrap());
+    }
+    lines
 }
