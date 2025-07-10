@@ -187,10 +187,10 @@ impl CompetitiveMode {
         }
         let mut other_teams_point = 0;
 
-        if left_right_guess.trim().to_lowercase().starts_with('l') && guess < game_state.target {
+        if left_right_guess.trim().to_lowercase().starts_with('l') && guess > game_state.target {
             other_teams_point += 1;
         } else if left_right_guess.trim().to_lowercase().starts_with('r')
-            && guess > game_state.target
+            && guess < game_state.target
         {
             other_teams_point += 1;
         }
